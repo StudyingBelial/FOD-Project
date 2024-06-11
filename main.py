@@ -1,3 +1,3 @@
 from create_profile import students
 
-pass
+students.hello()

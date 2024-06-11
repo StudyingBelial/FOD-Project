@@ -17,3 +17,7 @@ class students:
     def grades():
         pass
 
+    @staticmethod
+    def hello():
+        print("Hello World!")
+
