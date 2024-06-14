@@ -12,12 +12,12 @@ class grades:
     def grade_adder(self):
         with open("grader.csv", mode = a, newline='') as grade_file:
             adder = csv.writer(grade_file)
-            id = print("Enter the user ID: ")
-            fod = print("Enter FOD Grades: ")
-            fom = print("Enter FOM Grades: ")
-            maths = print("Enter Maths Grades: ")
-            english = print("Enter English Grades: ")
-            it = print("Enter IT Grades: ")
+            id = input("Enter the user ID: ")
+            fod = input("Enter FOD Grades: ")
+            fom = input("Enter FOM Grades: ")
+            maths = input("Enter Maths Grades: ")
+            english = input("Enter English Grades: ")
+            it = input("Enter IT Grades: ")
             adder.writerow([id,fod,fom,maths,english,it])
 
     def grade_modifier_verify(self):
