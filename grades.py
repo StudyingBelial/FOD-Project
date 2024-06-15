@@ -10,7 +10,7 @@ class grades:
                 print(f"|   {details[0]}  |   {details[1]}  |   {details[2]}  |   {details[3]}  |   {details[4]}  |   {details[5]}  |")
     
     def grade_adder(self):
-        with open("grader.csv", mode = a, newline='') as grade_file:
+        with open("grader.csv", mode = "a", newline='') as grade_file:
             adder = csv.writer(grade_file)
             id = input("Enter the user ID: ")
             fod = input("Enter FOD Grades: ")
@@ -23,7 +23,7 @@ class grades:
     def grade_modifier_verify(self):
         prompt_id = input("Please Enter the Student ID: ")
         vaid_user = False
-        with open("grades.csv", mode = r, newline='') as file:
+        with open("grades.csv", mode = "r", newline='') as file:
             grades = csv.reader(file)
             for id in grades:
                 if (id == prompt_id):
@@ -59,7 +59,7 @@ class grades:
                                 print("Please enter valid subject!")
 
     def grade_editer(self, id ,subject, marks):
-        with open("grades.csv", mode = r,newline='') as file:
+        with open("grades.csv", mode = "r",newline='') as file:
             with open("temp_grades.csv", mode = w, newline='') as temp_file:
                 temp = csv.writer(temp_file)
                 grades = csv.reader(file)
@@ -68,7 +68,7 @@ class grades:
                         details[subject] == marks
                     temp.writerow()
 
-        with open("grader.csv", mode = w, newline='') as grade_file:
+        with open("grader.csv", mode = "w", newline='') as grade_file:
             with open("temp_grades.csv", mode = r, newline='') as temp_file:
                 temp = csv.reader(temp_file)
                 adder = csv.writer(grade_file)
