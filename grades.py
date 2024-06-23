@@ -7,6 +7,18 @@ class Grades:
 
     def list_grades(self):
         print(self.grades)
+
+    @staticmethod
+    def add_student(id):
+        fod = float(input("FOD Grades: "))
+        fom = float(input("FOM Grades: "))
+        it = float(input("IT Grades: "))
+        english = float(input("English Grades: "))
+        maths = float(input("Maths Grades: "))
+        marks = {"id":id,"fod":fod, "fom":fom,"it":it,"english":english, "maths":maths}
+        df = pd.DataFrame(data = marks)
+        df.to_csv("data/grades.csv", mode = "a", header = False)
+
     
     def calculator(self):
         new_data = pd.DataFrame()
@@ -17,7 +29,7 @@ class Grades:
         print(new_data)
 
     @staticmethod
-    def student_id():
+    def student_id(): #unusuable
         users = pd.read_csv("data/users.csv")
         id = pd.DataFrame(columns=["id"])
         for i in range(len(users)):
@@ -28,7 +40,7 @@ class Grades:
 
 
     @staticmethod
-    def grade_file_use():
+    def grade_file_use(): #unusuable
         grade = pd.read_csv("data/grades.csv")
         id = pd.read_csv("data/student_id.csv")
         grade.pop("id")
@@ -39,4 +51,3 @@ class Grades:
         id["maths"] = grade ["maths"]
         id.to_csv("grades.csv", index = True)
         print(id)
-
