@@ -1,16 +1,18 @@
+import pandas as pd
 import csv
-import datetime
+import numpy as np
+import time
 
 class Users:
-    def __init__(self):
-        self.f_name = input("First Name: ")
-        self.l_name = input("Last Name: ")
-        self.number = input("Phone Number: ")
-        self.role = input("Role: ")
+    def list_users():
+        users = pd.read_csv("data/users.csv")
+        print(users)
 
-    def generate_unique_id():
-        now = datetime.datetime.now()
-        
-        random_id = now.strftime("%Y%f")
-        unique_id = self.f_name.lower()+self.l_name.lower()+random_id
-        return unique_id
+    def add_user():
+        f_name =input("First Name: ")
+        l_name =input("Last Name: ")
+        email = input("Email: ")
+        role = input("Role: ")
+        city = input("City: ")
+        id = f_name[0].lower() + l_name[0].lower() + str(int(time.time()))
+        print(id)
