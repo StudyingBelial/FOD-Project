@@ -2,10 +2,8 @@ import csv
 import pandas as pd
 
 class Grades:
-    def __init__(self):
-        self.grades = pd.read_csv("data/grades.csv")
-
     def list_grades(self):
+        self.grades = pd.read_csv("data/grades.csv")
         print(self.grades)
 
     @staticmethod
@@ -21,6 +19,7 @@ class Grades:
 
     
     def calculator(self):
+        self.grades = pd.read_csv("data/grades.csv")
         new_data = pd.DataFrame()
         new_data = self.grades.copy()
         #print(new_data)
