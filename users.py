@@ -1,9 +1,8 @@
-import grades
 import os
 import pandas as pd
-import time
 import random
 import string
+from tkinter import messagebox
 
 class Users:
     def __init__(self):
@@ -15,100 +14,94 @@ class Users:
     def list_users(self):
         print(self.users)
 
-    def input_new_user(self):
-        f_name = input("First Name: ")
-        l_name = input("Last Name: ")
-        email = input("Email: ")
-        role = input("Role: ")
-        city = input("City: ")
+    def input_new_user(self, f_name, l_name, email, role, city):
         id = self.unique_id_generator()
-        self.info = {"id": id,"full_name":f_name, "last_name":l_name,"email":email,"role":role, "city":city}
+        if not all([f_name, l_name, email, role, city, id]):
+            print("One of the user details is missing! Please try again!")
+            messagebox.showinfo("Alert", "One of the user details is missing! Please try again!")
+            return None
+
+        self.info = {"id": id, "first_name": f_name, "last_name": l_name, "email": email, "role": role, "city": city}
+        self.new_user_main()
+        self.generate_password(id)
+        return id
 
     def new_user_main(self):
         if self.info.get("id").strip():
-            ########################INCOMPLETE
             self.write_new_user()
         else:
             print("New user cannot be added, please try again!")
-            return None
-            
-        # for value in self.info.values():
-        #     if(value == ""):
-        #         print("Cannot enter blank details while creating a new user!")
-        #         print("Please try again!")
-        #         return None
-        role = self.info.get("role")
-        if role == "Student":
-            id = self.info.get("id")
-            Grades.add_student_grades(id)
-        elif role == "Teacher":
-            # code here for Teacher
-            pass
-        elif role == "Admin":
-            # code here for Admin
-            pass
-        else:
-            print("The entered role is not valid")
+            messagebox.showinfo("Alert", "New user cannot be added, please try again!")
+
+    def generate_password(self, id):
+        password = ''.join(random.choices(string.ascii_letters + string.digits, k=8))
+        data = {"id": id, "password": password}
+        password_df = pd.DataFrame(data=[data])
+        password_df.to_csv("data/passwords.csv", mode="a", index=False, header=False)
+        print("Password generated successfully!")
+        messagebox("Alert", f"Password generated successfully! NEW PASSWORD {password}")
+        
 
     def write_new_user(self):
         if os.path.exists("data/users.csv"):
-            new_user = pd.DataFrame(data = self.info)
-            new_user.to_csv("data/users.csv", mode = "a")
-            print("User Added Successfully!")
+            new_user = pd.DataFrame(data=[self.info])
+            new_user.to_csv("data/users.csv", mode="a", index=False, header=False)
+            print("User added successfully!")
+            messagebox("Alert", "User added successfully!")
         else:
             print("User details file missing! Can't add to a non-existing file")
-            
 
     def unique_id_generator(self):
         id_checker = self.users
         unique_id = ''
         id_check = True
         char = string.ascii_uppercase + string.digits
-        for i in range (12):
-            unique_id = unique_id + ''.join(random.choice(char))
+        for _ in range(12):
+            unique_id += ''.join(random.choice(char))
         for i in id_checker.iterrows():
             a = i[1]["id"]
-            if (a == unique_id):
+            if a == unique_id:
                 id_check = False
                 break
-            if id_check:
-                return unique_id
-            else:
-                print("Failed to Generate User ID! Please try again later!")
-                return None
+        if id_check:
+            return unique_id
+        else:
+            return None
 
-    def access_user_details(self):
-        user_id = input("Enter the user ID: ")
+    def access_user_details(self, user_id, field, new_data):
         user_found = False
         for index, row in self.users.iterrows():
             if row['id'] == user_id:
                 user_found = True
                 print("User Found!")
                 print(self.users.iloc[index])
-                print("first_name , last_name , email , role , city")
-                field = input("What would you like to change: ")
-                if (field =="first_name" or field =="last_name" or field =="email" or field =="role" or field =="city" ):
-                    new_data = input("Enter the new value: ")
-                    update_user_details(index, field, new_data)
-                else:
-                    print("Please enter a valid field!")
-                    break
-            if ((not user_found) and index == (len(self.users)-1)):
-                print("User ID not found.")
-                break
+                self.update_user_details(index, field, new_data)
+        if not user_found:
+            print("User ID not found.")
 
     def update_user_details(self, index, column, new_data):
         self.users.at[index, column] = new_data
         if os.path.exists("data/users.csv"):
-            self.users.to_csv('data/users.csv', index=False)
-            print("User Detail Successfully Updated")
+            self.users.to_csv("data/users.csv", index=False)
+            print("User detail successfully updated")
+            messagebox("Alert", "User added successfully!")
             print(self.users.iloc[index])
         else:
             print("User details file missing! Can't edit from non-existing file")
-            
 
-# obj = Users
-# obj.entering_new_user()
-# info = {"first_name":"aarya", "last_name":"bhandari","email":"email","role":"role", "city":"city"}
-# Users.adding_user(info, 12345)
-print(Users.unique_id_generator())
+    def remove_users(self):
+        user_id = input("Enter the user ID: ")
+        user_found = False
+        for index, row in self.users.iterrows():
+            if row['id'] == user_id:
+                user_found = True
+                if os.path.exists("data/users.csv"):
+                    self.users = self.users.drop(index)
+                    self.users.to_csv("data/users.csv", index=False)
+                    print("User removed successfully")
+                    break
+                else:
+                    print("User details file missing! Can't remove from non-existing file")
+                    break
+        if not user_found:
+            print("User ID not found.")

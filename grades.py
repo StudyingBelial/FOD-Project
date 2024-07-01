@@ -1,5 +1,7 @@
 import csv
 import pandas as pd
+import os
+import tkinter.messagebox as tkMessageBox
 
 class Grades:
     def __init__(self):
@@ -12,20 +14,26 @@ class Grades:
         print(self.grades)
 
     @staticmethod
-    def add_student_grades(id):
-        fod = float(input("FOD Grades: "))
-        fom = float(input("FOM Grades: "))
-        it = float(input("IT Grades: "))
-        english = float(input("English Grades: "))
-        maths = float(input("Maths Grades: "))
-        marks = {"id":id,"fod":fod, "fom":fom,"it":it,"english":english, "maths":maths}
-        df = pd.DataFrame(data = marks)
-        if os.file_path.exist("data/grades.csv"):
-            df.to_csv("data/grades.csv", mode = "a", header = False)
+    def add_student_grades(id, fod, fom, it, english, maths):
+        marks = {"id": [id], "fod": [fod], "fom": [fom], "it": [it], "english": [english], "maths": [maths]}
+        df = pd.DataFrame(data=marks)
+        file_path = "data/grades.csv"
+        if os.path.exists(file_path):
+            df.to_csv(file_path, mode="a", header=False, index=False)
         else:
-            print("Grades Files for students does not exist! Cannot write to a non-existing file")
+            print("Grades file for students does not exist! Cannot write to a non-existing file")
+            tkMessageBox("Alert","Grades file for students does not exist! Cannot write to a non-existing file")  
 
-    
+    @staticmethod
+    def edit_student_grades(id, column, new_grade):
+        if column in self.grades.columns:
+            self.grades.loc[self.grades['id'] == id, column] = new_grade
+            self.grades.to_csv("data/grades.csv", index=False)
+            print("Grades updated successfully.")
+            tkMessageBox("Alert","Grades updated successfully.")
+        else:
+            print("Invalid column name.")
+
     def calculator(self):
         self.grades = pd.read_csv("data/grades.csv")
         new_data = pd.DataFrame()
