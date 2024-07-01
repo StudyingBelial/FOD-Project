@@ -12,7 +12,7 @@ class Users:
         users = pd.read_csv("data/users.csv")
         print(users)
 
-    def entering_new_user():
+    def input_new_user():
         f_name = input("First Name: ")
         l_name = input("Last Name: ")
         email = input("Email: ")
@@ -20,12 +20,13 @@ class Users:
         city = input("City: ")
         id = Users.unique_id_generator()
         info = {"id": id,"full_name":f_name, "last_name":l_name,"email":email,"role":role, "city":city}
+        return info
 
-        if id == "":
+    def new_user_root(info):
+        if info.get('id') == None:
             return None
         else:
-            Users.adding_user(info)
-
+            Users.write_new_user(info)
         for value in info.values():
             if(value == ""):
                 print("Cannot enter blank details!")
@@ -33,7 +34,7 @@ class Users:
                 break
             else:
                 if(role == "Student"):
-                    Grades.add_student(id)
+                    Grades.add_student_grades(id)
                 else:
                     if(role == "Teacher"):
                         pass#code here
@@ -44,7 +45,7 @@ class Users:
                             print("The entered role is not valid")
 
     @staticmethod
-    def adding_user(info):
+    def write_new_user(info):
         user = pd.read_csv("data/users.csv")
         print(user)
         new_user = pd.DataFrame(data = info)

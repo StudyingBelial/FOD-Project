@@ -7,7 +7,7 @@ class Grades:
         print(self.grades)
 
     @staticmethod
-    def add_student(id):
+    def add_student_grades(id):
         fod = float(input("FOD Grades: "))
         fom = float(input("FOM Grades: "))
         it = float(input("IT Grades: "))
