@@ -2,8 +2,13 @@ import csv
 import pandas as pd
 
 class Grades:
+    def __init__(self):
+        try:
+            self.grades = pd.read_csv("data/grades.csv")
+        except FileNotFoundError:
+            print("Grades Files for students does not exist!")
+
     def list_grades(self):
-        self.grades = pd.read_csv("data/grades.csv")
         print(self.grades)
 
     @staticmethod
@@ -15,7 +20,10 @@ class Grades:
         maths = float(input("Maths Grades: "))
         marks = {"id":id,"fod":fod, "fom":fom,"it":it,"english":english, "maths":maths}
         df = pd.DataFrame(data = marks)
-        df.to_csv("data/grades.csv", mode = "a", header = False)
+        if os.file_path.exist("data/grades.csv"):
+            df.to_csv("data/grades.csv", mode = "a", header = False)
+        else:
+            print("Grades Files for students does not exist! Cannot write to a non-existing file")
 
     
     def calculator(self):
